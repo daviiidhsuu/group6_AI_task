@@ -192,7 +192,7 @@
             </div>
             <!-- 角色選擇 -->
             <div>
-                <label class="block text-[10px] font-black text-slate-500 mb-4 tracking-[0.1em]">選擇你的角色 <span class="opacity-40 normal-case font-light">/ Choose Character</span></label>
+                <label class="block text-[10px] font-black text-slate-500 mb-4 tracking-[0.1em]">選擇你的專屬顧問 <span class="opacity-40 normal-case font-light">/ Choose Consultant</span></label>
                 <div class="grid grid-cols-4 gap-4">
                     <button onclick="selectLandingChar('Xavier')" id="landing-btn-Xavier" class="landing-char-btn active flex flex-col items-center gap-2">
                         <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-indigo-600 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">⭐</div>
@@ -231,11 +231,11 @@
             <!-- MBTI -->
             <div>
                 <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">你的 MBTI <span class="opacity-40 normal-case font-light">/ Personality Type</span></label>
-                <input type="text" id="user-mbti" placeholder="INTJ" maxlength="4" oninput="this.value=this.value.toUpperCase()" class="w-full p-5 rounded-2xl input-field text-xl font-black text-center uppercase tracking-[0.4em]">
+                <input type="text" id="user-mbti" placeholder="INTJ" maxlength="4" oninput="this.value=this.value.toUpperCase()" class="w-full p-5 rounded-2xl input-field text-l font-black text-center uppercase tracking-[0.4em]">
             </div>
             <!-- 進入按鈕 -->
             <button onclick="enterApp()" class="w-full py-6 bg-white text-indigo-950 font-black text-xl rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
-                進入深空終端 →
+                開始
             </button>
             <p id="landing-error" class="hidden text-center text-xs text-red-400 font-bold tracking-wide">請填寫生日並選擇角色後再進入</p>
         </div>
@@ -345,21 +345,21 @@
                 <div id="config-view-savings" class="space-y-6">
                     <div>
                         <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">夢想目標 <span class="opacity-40 normal-case font-light">/ Dream Goal</span></label>
-                        <input type="text" id="dream-name" value="臨空市雙人旅行" class="w-full p-5 rounded-2xl input-field text-lg font-bold">
+                        <input type="text" id="dream-name" placeholder="例：臨空市雙人旅行" class="w-full p-5 rounded-2xl input-field text-lg font-bold">
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">目標金額 <span class="opacity-40 normal-case font-light">/ Target Amount ($)</span></label>
-                        <input type="number" id="target-amount" value="200000" min="1" oninput="updateSavingsPreview(); validateField('target-amount', 'target-error')" class="w-full p-5 rounded-2xl input-field text-2xl font-black tracking-tight">
+                        <input type="number" id="target-amount" placeholder="例：200000" min="1" oninput="updateSavingsPreview(); validateField('target-amount', 'target-error')" class="w-full p-5 rounded-2xl input-field text-2xl font-black tracking-tight">
                         <p id="target-error" class="error-msg"></p>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-600 mb-2 tracking-[0.1em]">初始存款 <span class="opacity-40 normal-case font-light">/ Initial</span></label>
-                            <input type="number" id="current-savings" value="50000" min="0" oninput="updateSavingsPreview()" class="w-full p-5 rounded-2xl input-field font-bold">
+                            <input type="number" id="current-savings" placeholder="例：50000" min="0" oninput="updateSavingsPreview()" class="w-full p-5 rounded-2xl input-field font-bold">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-600 mb-2 tracking-[0.1em]">存入月數 <span class="opacity-40 normal-case font-light">/ Months</span></label>
-                            <input type="number" id="months" value="12" min="1" oninput="updateSavingsPreview(); validateField('months', 'months-error')" class="w-full p-5 rounded-2xl input-field font-bold">
+                            <input type="number" id="months" placeholder="例：12" min="1" oninput="updateSavingsPreview(); validateField('months', 'months-error')" class="w-full p-5 rounded-2xl input-field font-bold">
                             <p id="months-error" class="error-msg"></p>
                         </div>
                     </div>
@@ -419,67 +419,99 @@
                 <div class="glass-card p-10 min-h-[780px] flex flex-col relative overflow-hidden">
                     <div class="absolute top-[-40px] right-[-40px] text-[220px] opacity-[0.04] pointer-events-none font-black italic select-none" id="bg-char-icon">⭐</div>
 
-                    <div class="flex gap-10 mb-8 relative z-20 border-b border-white/5 pb-4 overflow-x-auto no-scrollbar">
-                        <button onclick="switchView('active')" id="tab-active" class="tab-btn active text-xs font-black uppercase tracking-widest whitespace-nowrap">進行中計劃</button>
-                        <button onclick="switchView('completed')" id="tab-completed" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">已完成計劃</button>
+                    <!-- 4 分頁標籤 -->
+                    <div class="flex gap-6 mb-8 relative z-20 border-b border-white/5 pb-4 overflow-x-auto no-scrollbar">
+                        <button onclick="switchView('latest')" id="tab-latest" class="tab-btn active text-xs font-black uppercase tracking-widest whitespace-nowrap">最新計畫</button>
+                        <button onclick="switchView('active')" id="tab-active" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">進行中</button>
+                        <button onclick="switchView('completed')" id="tab-completed" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">已完成</button>
+                        <button onclick="switchView('badges')" id="tab-badges" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">徽章收藏室</button>
                     </div>
 
-                    <!-- 進行中計劃 -->
-                    <div id="view-active" class="relative z-20 flex flex-col flex-1">
-                        <div class="mb-5 space-y-4">
-                            <div class="flex justify-between items-start">
-                                <div id="display-dream-target" class="text-3xl font-black text-white tracking-tight">未建立計畫</div>
-                                <div class="text-right">
-                                    <p class="text-[10px] text-slate-500 uppercase tracking-widest">目前進度</p>
-                                    <div id="progress-percent" class="text-2xl font-black text-accent-color">0%</div>
+                    <!-- 最新計畫 -->
+                    <div id="view-latest" class="relative z-20 flex flex-col flex-1">
+                        <!-- 空狀態 -->
+                        <div id="latest-empty" class="flex-1 flex flex-col items-center justify-center text-center gap-4">
+                            <div class="text-6xl opacity-20">🚀</div>
+                            <p class="text-slate-500 text-sm leading-relaxed">在左側填寫計畫資料<br/>啟動後即可在這裡追蹤進度</p>
+                        </div>
+                        <!-- 計畫詳情 -->
+                        <div id="latest-detail" class="hidden flex flex-col flex-1">
+                            <div class="mb-5 space-y-4">
+                                <div class="flex justify-between items-start">
+                                    <div id="display-dream-target" class="text-3xl font-black text-white tracking-tight"></div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-slate-500 uppercase tracking-widest">目前進度</p>
+                                        <div id="progress-percent" class="text-2xl font-black text-accent-color">0%</div>
+                                    </div>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 p-6 rounded-3xl flex items-center justify-between shadow-inner">
+                                    <div>
+                                        <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-1 font-bold">本月建議存入金額 (KPI)</p>
+                                        <div id="monthly-kpi" class="text-4xl font-black text-white">$ 0</div>
+                                    </div>
+                                    <div class="w-12 h-12 rounded-2xl bg-accent-color/20 flex items-center justify-center text-accent-color text-xl">💰</div>
+                                </div>
+                                <div id="feedback-dialogue" class="dialogue-box">
+                                    <p id="dialogue-text" class="text-sm leading-relaxed text-slate-200 italic">"規劃未來中...請先完成設定。"</p>
                                 </div>
                             </div>
-                            <div class="bg-white/5 border border-white/10 p-6 rounded-3xl flex items-center justify-between shadow-inner">
-                                <div>
-                                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-1 font-bold">本月建議存入金額 (KPI)</p>
-                                    <div id="monthly-kpi" class="text-4xl font-black text-white">$ 0</div>
+                            <!-- 儲蓄清單 -->
+                            <div class="flex-1 bg-black/30 rounded-2xl border border-white/5 overflow-hidden mb-5">
+                                <div class="max-h-[180px] overflow-y-auto no-scrollbar">
+                                    <table class="w-full text-left text-sm">
+                                        <thead class="bg-white/5 sticky top-0 z-10">
+                                            <tr>
+                                                <th class="p-3 font-black text-[10px] text-slate-500 uppercase">月份</th>
+                                                <th class="p-3 font-black text-[10px] text-slate-500 uppercase">存入額</th>
+                                                <th class="p-3 font-black text-[10px] text-slate-500 text-right uppercase">剩餘缺口</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ledger-body"></tbody>
+                                    </table>
                                 </div>
-                                <div class="w-12 h-12 rounded-2xl bg-accent-color/20 flex items-center justify-center text-accent-color text-xl">💰</div>
                             </div>
-                            <div id="feedback-dialogue" class="dialogue-box">
-                                <p id="dialogue-text" class="text-sm leading-relaxed text-slate-200 italic">"規劃未來中...請先完成設定。"</p>
-                            </div>
-                        </div>
-                        <!-- 儲蓄清單 -->
-                        <div class="flex-1 bg-black/30 rounded-2xl border border-white/5 overflow-hidden mb-5">
-                            <div class="max-h-[180px] overflow-y-auto no-scrollbar">
-                                <table class="w-full text-left text-sm">
-                                    <thead class="bg-white/5 sticky top-0 z-10">
-                                        <tr>
-                                            <th class="p-3 font-black text-[10px] text-slate-500 uppercase">月份</th>
-                                            <th class="p-3 font-black text-[10px] text-slate-500 uppercase">存入額</th>
-                                            <th class="p-3 font-black text-[10px] text-slate-500 text-right uppercase">剩餘缺口</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="ledger-body"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <!-- 紀錄輸入 -->
-                        <div class="mt-auto border-t border-white/10 pt-5">
-                            <div class="flex items-center justify-between mb-3">
-                                <h4 class="font-black text-white text-xs tracking-widest uppercase">本日紀錄</h4>
-                                <span class="text-[10px] text-slate-500 font-bold uppercase" id="ledger-date-target"></span>
-                            </div>
-                            <div class="flex gap-4">
-                                <input type="number" id="record-amount" placeholder="本月存入額" class="flex-1 p-5 rounded-2xl input-field text-lg font-bold">
-                                <button onclick="addRecord()" class="px-8 bg-white text-indigo-950 font-black rounded-2xl hover:scale-105 transition-transform shadow-2xl text-xs uppercase tracking-widest">存入</button>
+                            <!-- 紀錄輸入 -->
+                            <div class="mt-auto border-t border-white/10 pt-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="font-black text-white text-xs tracking-widest uppercase">本日紀錄</h4>
+                                    <span class="text-[10px] text-slate-500 font-bold uppercase" id="ledger-date-target"></span>
+                                </div>
+                                <div class="flex gap-4">
+                                    <input type="number" id="record-amount" placeholder="本月存入額" class="flex-1 p-5 rounded-2xl input-field text-lg font-bold">
+                                    <button onclick="addRecord()" class="px-8 bg-white text-indigo-950 font-black rounded-2xl hover:scale-105 transition-transform shadow-2xl text-xs uppercase tracking-widest">存入</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 已完成計劃 -->
+                    <!-- 進行中 -->
+                    <div id="view-active" class="hidden relative z-20 flex flex-col flex-1">
+                        <div id="active-empty" class="flex-1 flex flex-col items-center justify-center text-center gap-4">
+                            <div class="text-6xl opacity-20">📋</div>
+                            <p class="text-slate-500 text-sm leading-relaxed">尚無進行中的計畫<br/>在左側啟動計畫吧</p>
+                        </div>
+                        <div id="active-list" class="hidden flex-1 space-y-3 overflow-y-auto no-scrollbar pr-1"></div>
+                    </div>
+
+                    <!-- 已完成 -->
                     <div id="view-completed" class="hidden relative z-20 flex flex-col flex-1">
                         <div id="completed-empty" class="flex-1 flex flex-col items-center justify-center text-center gap-4">
+                            <div class="text-6xl opacity-20">✅</div>
+                            <p class="text-slate-500 text-sm leading-relaxed">完成第一個儲蓄目標<br/>即可在這裡查看</p>
+                        </div>
+                        <div id="completed-list" class="hidden flex-1 space-y-3 overflow-y-auto no-scrollbar pr-1"></div>
+                    </div>
+
+                    <!-- 徽章收藏室 -->
+                    <div id="view-badges" class="hidden relative z-20 flex flex-col flex-1">
+                        <div id="badges-empty" class="flex-1 flex flex-col items-center justify-center text-center gap-4">
                             <div class="text-6xl opacity-20">🏆</div>
                             <p class="text-slate-500 text-sm leading-relaxed">完成第一個儲蓄目標<br/>徽章將顯示在這裡</p>
                         </div>
-                        <div id="completed-list" class="hidden flex-1 space-y-3 overflow-y-auto no-scrollbar pr-1"></div>
+                        <div id="badges-grid" class="hidden flex-1 flex flex-col">
+                            <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-4">你的戰利品收藏</p>
+                            <div id="badges-list" class="flex-1 space-y-3 overflow-y-auto no-scrollbar pr-1"></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -540,6 +572,7 @@
         let currentRisk = 'mid';
         let selectedProductRate = 0.065;
         let plan = { dream: "", target: 0, current: 0, months: 0, records: [], kpi: 0, completed: false };
+        let allPlans = [];
         let selectedLandingChar = 'Xavier';
         let userProfile = {};
 
@@ -705,25 +738,34 @@
             const validTarget = validateField('target-amount', 'target-error');
             const validMonths = validateField('months', 'months-error');
             if (!validTarget || !validMonths) return;
-            plan.dream = document.getElementById('dream-name').value;
-            plan.target = parseFloat(document.getElementById('target-amount').value);
-            plan.current = parseFloat(document.getElementById('current-savings').value) || 0;
-            plan.months = parseInt(document.getElementById('months').value);
-            plan.kpi = Math.max(0, Math.round((plan.target - plan.current) / plan.months));
-            plan.records = [];
+            const newPlan = {
+                dream: document.getElementById('dream-name').value.trim() || '未命名計畫',
+                target: parseFloat(document.getElementById('target-amount').value),
+                current: parseFloat(document.getElementById('current-savings').value) || 0,
+                months: parseInt(document.getElementById('months').value),
+                records: [],
+                kpi: 0,
+                completed: false,
+                character: currentCharacter
+            };
+            newPlan.kpi = Math.max(0, Math.round((newPlan.target - newPlan.current) / newPlan.months));
+            allPlans.unshift(newPlan);
+            plan = allPlans[0];
             planInitialized = true;
-            plan.completed = false;
             document.getElementById('display-dream-target').innerText = plan.dream;
             document.getElementById('monthly-kpi').innerText = `$ ${plan.kpi.toLocaleString()}`;
             document.getElementById('dialogue-text').innerHTML = `<span class="font-black text-accent-color uppercase">${config[currentCharacter].name}：</span><br/>"計畫建立成功。讓我們朝著 ${plan.dream} 邁進。"`;
             updateLedger();
-            switchView('active');
+            document.getElementById('latest-empty').classList.add('hidden');
+            document.getElementById('latest-detail').classList.remove('hidden');
+            renderActivePlans();
+            switchView('latest');
         }
 
         function switchView(view) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`tab-${view}`).classList.add('active');
-            ['active', 'completed'].forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
+            ['latest', 'active', 'completed', 'badges'].forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
             document.getElementById(`view-${view}`).classList.remove('hidden');
         }
 
@@ -736,6 +778,7 @@
             updateLedger();
             showDialogue(amount >= plan.kpi);
             checkReward();
+            renderActivePlans();
         }
 
         function showDialogue(met) {
@@ -768,35 +811,87 @@
             plan.records.forEach(r => { totalSaved += r; });
             if (totalSaved >= plan.target && plan.target > 0) {
                 plan.completed = true;
-                const char = config[currentCharacter];
-                completedPlans.push({
-                    dream: plan.dream,
-                    target: plan.target,
-                    character: currentCharacter,
-                    icon: char.reward.icon,
-                    title: char.reward.title,
-                    quote: char.reward.quote
-                });
+                const char = config[plan.character];
+                plan.icon = char.reward.icon;
+                plan.title = char.reward.title;
+                plan.quote = char.reward.quote;
                 document.getElementById('reward-icon').innerText = char.reward.icon;
                 document.getElementById('reward-title').innerText = char.reward.title;
                 document.getElementById('reward-char-quote').innerText = `"${char.name}：${char.reward.quote}"`;
                 document.getElementById('reward-overlay').classList.remove('hidden');
+                renderActivePlans();
                 renderCompletedPlans();
+                renderBadges();
             }
         }
 
-        function renderCompletedPlans() {
-            const list = document.getElementById('completed-list');
-            const empty = document.getElementById('completed-empty');
-            if (completedPlans.length === 0) {
+        function renderActivePlans() {
+            const list = document.getElementById('active-list');
+            const empty = document.getElementById('active-empty');
+            const activePlans = allPlans.filter(p => !p.completed);
+            if (activePlans.length === 0) {
                 empty.classList.remove('hidden');
                 list.classList.add('hidden');
                 return;
             }
             empty.classList.add('hidden');
             list.classList.remove('hidden');
-            list.innerHTML = completedPlans.map(p => `
-                <div class="completed-plan-card p-4 rounded-2xl flex items-center gap-4">
+            list.innerHTML = activePlans.map(p => {
+                let totalSaved = p.current;
+                p.records.forEach(r => { totalSaved += r; });
+                const percent = Math.min(100, Math.round((totalSaved / p.target) * 100));
+                const charCfg = config[p.character];
+                return `
+                    <div class="completed-plan-card">
+                        <div class="text-2xl">${charCfg.icon}</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-black text-white truncate">${p.dream}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">目標 $${p.target.toLocaleString()} · 進度 ${percent}%</div>
+                        </div>
+                        <div class="text-[12px] font-black text-accent-color shrink-0">${percent}%</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCompletedPlans() {
+            const list = document.getElementById('completed-list');
+            const empty = document.getElementById('completed-empty');
+            const donePlans = allPlans.filter(p => p.completed);
+            if (donePlans.length === 0) {
+                empty.classList.remove('hidden');
+                list.classList.add('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            list.classList.remove('hidden');
+            list.innerHTML = donePlans.map(p => {
+                const charCfg = config[p.character];
+                return `
+                    <div class="completed-plan-card">
+                        <div class="text-2xl">${charCfg.icon}</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-black text-white truncate">${p.dream}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">目標 $${p.target.toLocaleString()} · 已完成 ✅</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderBadges() {
+            const grid = document.getElementById('badges-grid');
+            const empty = document.getElementById('badges-empty');
+            const donePlans = allPlans.filter(p => p.completed && p.icon);
+            if (donePlans.length === 0) {
+                empty.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            grid.classList.remove('hidden');
+            document.getElementById('badges-list').innerHTML = donePlans.map(p => `
+                <div class="completed-plan-card">
                     <div class="text-3xl">${p.icon}</div>
                     <div class="flex-1 min-w-0">
                         <div class="text-sm font-black text-white truncate">${p.dream}</div>
