@@ -166,9 +166,82 @@
         .completed-plan-card:hover { border-color: var(--accent-color); }
         .landing-char-btn .avatar-box { filter: grayscale(1) brightness(0.5); transition: all 0.4s ease; }
         .landing-char-btn.active .avatar-box { filter: grayscale(0) brightness(1.2); transform: scale(1.15) translateY(-4px); border-color: var(--accent-color); box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 12px var(--accent-color); }
+
+        /* ── 約會邀請信封 ── */
+        @keyframes flap-open {
+            0%   { transform: rotateX(0deg); }
+            100% { transform: rotateX(-170deg); }
+        }
+        @keyframes letter-rise {
+            0%, 30% { transform: translateX(-50%) translateY(10px); opacity: 0; }
+            100%     { transform: translateX(-50%) translateY(-52px); opacity: 1; }
+        }
+        @keyframes seal-disappear {
+            0%   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%,-50%) scale(0.4); }
+        }
+        @keyframes invite-pop {
+            0%   { opacity: 0; transform: scale(0.88) translateY(24px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        #date-invite-card { animation: invite-pop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .envelope-scene {
+            position: relative; width: 240px; height: 170px; perspective: 700px;
+        }
+        .env-body {
+            position: absolute; bottom: 0; left: 0; width: 240px; height: 150px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--accent-color);
+            border-radius: 4px 4px 10px 10px;
+            box-shadow: 0 0 50px var(--glow-color), inset 0 0 20px rgba(255,255,255,0.02);
+            overflow: hidden;
+        }
+        .env-fold-left {
+            position: absolute; bottom: 0; left: 0;
+            width: 0; height: 0;
+            border-bottom: 80px solid rgba(255,255,255,0.05);
+            border-right: 120px solid transparent;
+        }
+        .env-fold-right {
+            position: absolute; bottom: 0; right: 0;
+            width: 0; height: 0;
+            border-bottom: 80px solid rgba(255,255,255,0.05);
+            border-left: 120px solid transparent;
+        }
+        .env-letter {
+            position: absolute; width: 188px; left: 50%; top: 12px;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 6px; padding: 14px;
+            animation: letter-rise 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+            z-index: 3;
+        }
+        .env-flap-wrap {
+            position: absolute; top: 10px; left: 0;
+            width: 240px; transform-origin: top center;
+            transform-style: preserve-3d;
+            animation: flap-open 0.75s cubic-bezier(0.4, 0, 0.2, 1) 0.25s forwards;
+            z-index: 10;
+        }
+        .env-flap {
+            width: 0; height: 0;
+            border-left: 120px solid transparent;
+            border-right: 120px solid transparent;
+            border-top: 88px solid rgba(255,255,255,0.08);
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
+        }
+        .env-seal {
+            position: absolute; top: 46%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 2rem; z-index: 15;
+            filter: drop-shadow(0 0 10px var(--accent-color));
+            animation: seal-disappear 0.35s ease 0.9s forwards;
+        }
     </style>
 </head>
 <body class="bg-xavier p-4 md:p-8">
+    <div id="bg-photo" style="position:fixed; inset:0; z-index:1; background-size:cover; background-position:center top; opacity:0; transition:opacity 1.2s cubic-bezier(0.4,0,0.2,1); filter:blur(8px) brightness(0.28); transform:scale(1.06); pointer-events:none;"></div>
     <div id="bg-decorations"></div>
 
     <!-- ════════ 入口頁面 ════════ -->
@@ -195,36 +268,52 @@
                 <label class="block text-[10px] font-black text-slate-500 mb-4 tracking-[0.1em]">選擇你的專屬顧問 <span class="opacity-40 normal-case font-light">/ Choose Consultant</span></label>
                 <div class="grid grid-cols-4 gap-4">
                     <button onclick="selectLandingChar('Xavier')" id="landing-btn-Xavier" class="landing-char-btn active flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-indigo-600 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">⭐</div>
-                        <span class="text-[9px] font-black tracking-widest text-indigo-300 uppercase">A男</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="1.jpg" class="w-full h-full object-cover object-top" alt="籃球員">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-indigo-300 uppercase">籃球員</span>
                     </button>
                     <button onclick="selectLandingChar('Zayne')" id="landing-btn-Zayne" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-slate-600 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">❄️</div>
-                        <span class="text-[9px] font-black tracking-widest text-slate-400 uppercase">B男</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="2.jpg" class="w-full h-full object-cover object-top" alt="偶像">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-slate-400 uppercase">偶像</span>
                     </button>
                     <button onclick="selectLandingChar('Rafayel')" id="landing-btn-Rafayel" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-rose-600 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">🎨</div>
-                        <span class="text-[9px] font-black tracking-widest text-rose-300 uppercase">C男</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="3.jpg" class="w-full h-full object-cover object-top" alt="董事長">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-rose-300 uppercase">董事長</span>
                     </button>
                     <button onclick="selectLandingChar('Sylus')" id="landing-btn-Sylus" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-zinc-800 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">🐦</div>
-                        <span class="text-[9px] font-black tracking-widest text-zinc-400 uppercase">D男</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="4.jpg" class="w-full h-full object-cover object-top" alt="大學生">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-zinc-400 uppercase">大學生</span>
                     </button>
                     <button onclick="selectLandingChar('FemA')" id="landing-btn-FemA" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-pink-700 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">🌸</div>
-                        <span class="text-[9px] font-black tracking-widest text-pink-300 uppercase">A女</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="5.jpg" class="w-full h-full object-cover object-top" alt="空服員">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-pink-300 uppercase">空服員</span>
                     </button>
                     <button onclick="selectLandingChar('FemB')" id="landing-btn-FemB" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-emerald-800 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">🍃</div>
-                        <span class="text-[9px] font-black tracking-widest text-emerald-300 uppercase">B女</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="6.jpg" class="w-full h-full object-cover object-top" alt="工程師">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-emerald-300 uppercase">工程師</span>
                     </button>
                     <button onclick="selectLandingChar('FemC')" id="landing-btn-FemC" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-amber-800 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">✨</div>
-                        <span class="text-[9px] font-black tracking-widest text-amber-300 uppercase">C女</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="7.jpg" class="w-full h-full object-cover object-top" alt="教師">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-amber-300 uppercase">教師</span>
                     </button>
                     <button onclick="selectLandingChar('FemD')" id="landing-btn-FemD" class="landing-char-btn flex flex-col items-center gap-2">
-                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] bg-violet-900 flex items-center justify-center text-3xl shadow-lg border-2 border-transparent">🌙</div>
-                        <span class="text-[9px] font-black tracking-widest text-violet-300 uppercase">D女</span>
+                        <div class="avatar-box w-16 h-16 rounded-[1.5rem] overflow-hidden shadow-lg border-2 border-transparent">
+                            <img src="8.jpg" class="w-full h-full object-cover object-top" alt="護士">
+                        </div>
+                        <span class="text-[9px] font-black tracking-widest text-violet-300 uppercase">護士</span>
                     </button>
                 </div>
             </div>
@@ -243,6 +332,45 @@
 
     <!-- ════════ 主應用程式 ════════ -->
     <div id="main-app" class="hidden">
+
+    <!-- 約會邀請彈窗 -->
+    <!-- 約會影片播放 -->
+    <div id="video-overlay" class="fixed inset-0 z-[120] hidden bg-black flex items-center justify-center">
+        <video id="date-video" class="w-full h-full object-contain" playsinline></video>
+        <button onclick="closeVideo()" class="absolute top-6 right-6 text-white/50 hover:text-white text-sm font-bold uppercase tracking-widest transition">✕ 跳過</button>
+    </div>
+
+    <div id="date-invite-overlay" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/95 backdrop-blur-2xl p-6">
+        <div id="date-invite-card" class="max-w-sm w-full flex flex-col items-center gap-8">
+            <!-- 信封 -->
+            <div class="envelope-scene">
+                <div class="env-body">
+                    <div class="env-fold-left"></div>
+                    <div class="env-fold-right"></div>
+                    <div class="env-letter">
+                        <p class="text-[9px] uppercase tracking-[0.25em] font-black text-center" style="color:var(--accent-color)">Private Invitation</p>
+                    </div>
+                </div>
+                <div class="env-flap-wrap"><div class="env-flap"></div></div>
+                <div class="env-seal">💌</div>
+            </div>
+            <!-- 文字 -->
+            <div class="text-center space-y-3">
+                <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em]">三個夢想達成 · 特別獎勵解鎖</p>
+                <h2 class="text-2xl font-black text-white tracking-tight" id="invite-title">你收到了一封邀請函</h2>
+                <p class="text-sm text-slate-300 leading-relaxed italic px-4" id="invite-message"></p>
+            </div>
+            <!-- 按鈕 -->
+            <div class="w-full space-y-3">
+                <button onclick="acceptDateInvite()" class="w-full py-5 bg-white text-indigo-950 font-black text-lg rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
+                    接受邀請
+                </button>
+                <button onclick="closeDateInvite()" class="w-full py-3 text-slate-500 font-bold text-sm hover:text-slate-300 transition">
+                    稍後再說
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 獎勵彈窗 -->
     <div id="reward-overlay" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/90 backdrop-blur-xl p-6">
@@ -318,13 +446,18 @@
 
     <div class="max-w-6xl mx-auto relative z-10">
         <!-- Header -->
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-6xl font-black tracking-[0.4em] uppercase italic bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500">
-                深空儲蓄計畫
-            </h1>
-            <div class="flex justify-center gap-4 items-center mt-4">
-                <p class="text-slate-400 font-light tracking-[0.5em] text-xs uppercase">Evol Financial Terminal v3.5</p>
-                <button onclick="openShare()" class="bg-accent-color/20 text-accent-color border border-accent-color/50 px-3 py-1 rounded-full text-[10px] font-bold hover:bg-accent-color hover:text-white transition">分享計畫</button>
+        <header class="mb-12">
+            <button onclick="goBack()" class="flex items-center gap-2 text-slate-400 hover:text-white transition text-xs font-bold uppercase tracking-widest mb-6 group">
+                <span class="text-lg group-hover:-translate-x-1 transition-transform">←</span> 上一頁
+            </button>
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-black tracking-[0.4em] uppercase italic bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500">
+                    深空儲蓄計畫
+                </h1>
+                <div class="flex justify-center gap-4 items-center mt-4">
+                    <p class="text-slate-400 font-light tracking-[0.5em] text-xs uppercase">Evol Financial Terminal v3.5</p>
+                    <button onclick="openShare()" class="bg-accent-color/20 text-accent-color border border-accent-color/50 px-3 py-1 rounded-full text-[10px] font-bold hover:bg-accent-color hover:text-white transition">分享計畫</button>
+                </div>
             </div>
         </header>
 
@@ -552,14 +685,14 @@
 
     <script>
         const config = {
-            Xavier:  { name: "A男", accent: "#a78bfa", bodyClass: "bg-xavier",  icon: "⭐", scenType: 'stars',   reward: { id: 'xav_medal',   icon: "🏅", title: "星辰勳章",   quote: "這枚勳章代表我們共同守護的未來。辛苦了，我的獵人。" }, dialogues: { met: "做得很好。剩下的時間，要不要陪我睡一會？", unmet: "沒關係，也常常忘記時間。下個月一起趕上吧。" } },
-            Zayne:   { name: "B男", accent: "#7dd3fc", bodyClass: "bg-zayne",   icon: "❄️", scenType: 'snow',    reward: { id: 'zayne_ring',  icon: "💍", title: "永恆冰晶戒", quote: "這是獎勵，也是承諾。從今以後，你的夢想裡必須有我。" }, dialogues: { met: "數據顯示執行力很完美。繼續保持。", unmet: "偏離計畫不是好習慣。下個月請務必精準執行。" } },
-            Rafayel: { name: "C男", accent: "#fb7185", bodyClass: "bg-rafayel", icon: "🎨", scenType: 'bubbles', reward: { id: 'raf_pearl',   icon: "🐚", title: "深海珍珠",   quote: "這顆珍珠是深海最珍貴的收藏，現在是你的了。" }, dialogues: { met: "真不愧是我的獵人，太棒了！慶祝一下？", unmet: "怎麼少了這麼多？我的環島旅行要延期了嗎？一定要補回來喔！" } },
-            Sylus:   { name: "D男", accent: "#ef4444", bodyClass: "bg-sylus",   icon: "🐦", scenType: 'feathers',reward: { id: 'sylus_coin', icon: "🪙", title: "黑鴉金幣",   quote: "只有我能給予你這份勝利。收下它，成為我的專屬。" }, dialogues: { met: "利落。這才是我的獵人該有的執行力。", unmet: "失手了？在我的領地可不允許這種怠慢。下月連本帶利補回來。" } },
-            FemA:    { name: "A女", accent: "#f9a8d4", bodyClass: "bg-fema",    icon: "🌸", scenType: 'stars',   reward: { id: 'fema_ribbon', icon: "🎀", title: "星光緞帶",   quote: "這條緞帶代表你的努力與美麗。你做到了，我的夥伴。" }, dialogues: { met: "太棒了！你的努力我都看到了，繼續加油喔！", unmet: "沒關係，下個月我們一起加把勁，一定能追上的！" } },
-            FemB:    { name: "B女", accent: "#6ee7b7", bodyClass: "bg-femb",    icon: "🍃", scenType: 'bubbles', reward: { id: 'femb_leaf',   icon: "🌿", title: "翡翠葉片",   quote: "這片葉子見證了你的成長。自然的力量與你同在。" }, dialogues: { met: "穩穩的，很好！像大樹一樣，慢慢積累才是長久之道。", unmet: "這個月有點少，但沒關係，生長需要時間，我們繼續吧。" } },
-            FemC:    { name: "C女", accent: "#fcd34d", bodyClass: "bg-femc",    icon: "✨", scenType: 'feathers',reward: { id: 'femc_star',   icon: "⭐", title: "黃金星幣",   quote: "光芒四射！這枚星幣是你閃耀努力的象徵。" }, dialogues: { met: "閃閃發光！你這個月表現得超棒的，要繼續發光喔！", unmet: "星星有時也會黯淡，但你的光芒不會消失，下個月再出發！" } },
-            FemD:    { name: "D女", accent: "#c4b5fd", bodyClass: "bg-femd",    icon: "🌙", scenType: 'snow',    reward: { id: 'femd_moon',   icon: "🌕", title: "滿月水晶",   quote: "月光為你指引方向。這枚水晶是你堅持的見證。" }, dialogues: { met: "靜靜地、卻穩穩地前進，月亮為你驕傲。", unmet: "月有陰晴圓缺，這個月的缺口，下個月我們一起補滿。" } }
+            Xavier:  { name: "籃球員", accent: "#a78bfa", bodyClass: "bg-xavier",  icon: "⭐", scenType: 'stars',   reward: { id: 'xav_medal',   icon: "🏅", title: "星辰勳章",   quote: "這枚勳章代表我們共同守護的未來。辛苦了，我的獵人。" }, dialogues: { met: "做得很好。剩下的時間，要不要陪我睡一會？", unmet: "沒關係，也常常忘記時間。下個月一起趕上吧。" } },
+            Zayne:   { name: "偶像",  accent: "#7dd3fc", bodyClass: "bg-zayne",   icon: "❄️", scenType: 'snow',    reward: { id: 'zayne_ring',  icon: "💍", title: "永恆冰晶戒", quote: "這是獎勵，也是承諾。從今以後，你的夢想裡必須有我。" }, dialogues: { met: "數據顯示執行力很完美。繼續保持。", unmet: "偏離計畫不是好習慣。下個月請務必精準執行。" } },
+            Rafayel: { name: "董事長", accent: "#fb7185", bodyClass: "bg-rafayel", icon: "🎨", scenType: 'bubbles', reward: { id: 'raf_pearl',   icon: "🐚", title: "深海珍珠",   quote: "這顆珍珠是深海最珍貴的收藏，現在是你的了。" }, dialogues: { met: "真不愧是我的獵人，太棒了！慶祝一下？", unmet: "怎麼少了這麼多？我的環島旅行要延期了嗎？一定要補回來喔！" } },
+            Sylus:   { name: "大學生", accent: "#ef4444", bodyClass: "bg-sylus",   icon: "🐦", scenType: 'feathers',reward: { id: 'sylus_coin', icon: "🪙", title: "黑鴉金幣",   quote: "只有我能給予你這份勝利。收下它，成為我的專屬。" }, dialogues: { met: "利落。這才是我的獵人該有的執行力。", unmet: "失手了？在我的領地可不允許這種怠慢。下月連本帶利補回來。" } },
+            FemA:    { name: "空服員", accent: "#f9a8d4", bodyClass: "bg-fema",    icon: "🌸", scenType: 'stars',   reward: { id: 'fema_ribbon', icon: "🎀", title: "星光緞帶",   quote: "這條緞帶代表你的努力與美麗。你做到了，我的夥伴。" }, dialogues: { met: "太棒了！你的努力我都看到了，繼續加油喔！", unmet: "沒關係，下個月我們一起加把勁，一定能追上的！" } },
+            FemB:    { name: "工程師", accent: "#6ee7b7", bodyClass: "bg-femb",    icon: "🍃", scenType: 'bubbles', reward: { id: 'femb_leaf',   icon: "🌿", title: "翡翠葉片",   quote: "這片葉子見證了你的成長。自然的力量與你同在。" }, dialogues: { met: "穩穩的，很好！像大樹一樣，慢慢積累才是長久之道。", unmet: "這個月有點少，但沒關係，生長需要時間，我們繼續吧。" } },
+            FemC:    { name: "教師",  accent: "#fcd34d", bodyClass: "bg-femc",    icon: "✨", scenType: 'feathers',reward: { id: 'femc_star',   icon: "⭐", title: "黃金星幣",   quote: "光芒四射！這枚星幣是你閃耀努力的象徵。" }, dialogues: { met: "閃閃發光！你這個月表現得超棒的，要繼續發光喔！", unmet: "星星有時也會黯淡，但你的光芒不會消失，下個月再出發！" } },
+            FemD:    { name: "護士",  accent: "#c4b5fd", bodyClass: "bg-femd",    icon: "🌙", scenType: 'snow',    reward: { id: 'femd_moon',   icon: "🌕", title: "滿月水晶",   quote: "月光為你指引方向。這枚水晶是你堅持的見證。" }, dialogues: { met: "靜靜地、卻穩穩地前進，月亮為你驕傲。", unmet: "月有陰晴圓缺，這個月的缺口，下個月我們一起補滿。" } }
         };
 
         const products = {
@@ -577,6 +710,8 @@
         let userProfile = {};
 
         // ── Landing page ─────────────────────────────────────────
+        const charPhotoMap = { Xavier: 'bg1.jpg', Zayne: 'bg2.jpg', Rafayel: 'bg3.jpg', Sylus: 'bg4.jpg', FemA: 'bg5.jpg', FemB: 'bg6.jpg', FemC: 'bg7.jpg', FemD: 'bg8.jpg' };
+
         function selectLandingChar(key) {
             selectedLandingChar = key;
             const cfg = config[key];
@@ -587,6 +722,14 @@
             document.documentElement.style.setProperty('--accent-color', cfg.accent);
             document.documentElement.style.setProperty('--glow-color', `rgba(${hexToRgb(cfg.accent)},0.35)`);
             generateDecorations(cfg.scenType);
+            // 切換角色背景照片
+            const bgPhoto = document.getElementById('bg-photo');
+            if (charPhotoMap[key]) {
+                bgPhoto.style.backgroundImage = `url('${charPhotoMap[key]}')`;
+                bgPhoto.style.opacity = '1';
+            } else {
+                bgPhoto.style.opacity = '0';
+            }
             // 更新選取狀態
             document.querySelectorAll('.landing-char-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`landing-btn-${key}`).classList.add('active');
@@ -624,9 +767,68 @@
             switchTheme(selectedLandingChar);
             updateSavingsPreview();
         }
+        function goBack() {
+            if (planInitialized && allPlans.some(p => !p.completed)) {
+                if (!confirm('返回入口頁面後，目前的計畫資料將會清除。確定要返回嗎？')) return;
+            }
+            // 重置 JS 狀態
+            allPlans = [];
+            plan = { dream: "", target: 0, current: 0, months: 0, records: [], kpi: 0, completed: false };
+            planInitialized = false;
+            lastDateInviteAt = 0;
+
+            // 清除儲蓄計畫表單
+            document.getElementById('dream-name').value = '';
+            document.getElementById('target-amount').value = '';
+            document.getElementById('current-savings').value = '';
+            document.getElementById('months').value = '';
+            document.getElementById('preview-monthly-kpi').innerText = '$ —';
+            document.getElementById('target-error').innerText = '';
+            document.getElementById('months-error').innerText = '';
+            document.getElementById('target-amount').classList.remove('error');
+            document.getElementById('months').classList.remove('error');
+
+            // 清除投資計畫表單
+            document.getElementById('inv-dream-name').value = '';
+            document.getElementById('inv-target-amount').value = '';
+            document.getElementById('inv-months').value = '';
+            document.getElementById('inv-target-error').innerText = '';
+            document.getElementById('inv-months-error').innerText = '';
+            document.getElementById('inv-panel-waiting').classList.remove('hidden');
+            document.getElementById('inv-panel-results').classList.add('hidden');
+            document.getElementById('advisor-confirm').classList.add('hidden');
+
+            // 重置右側面板 UI
+            document.getElementById('latest-empty').classList.remove('hidden');
+            document.getElementById('latest-detail').classList.add('hidden');
+            document.getElementById('display-dream-target').innerText = '';
+            document.getElementById('progress-percent').innerText = '0%';
+            document.getElementById('monthly-kpi').innerText = '$ 0';
+            document.getElementById('dialogue-text').innerHTML = '"規劃未來中...請先完成設定。"';
+            document.getElementById('ledger-body').innerHTML = '';
+            document.getElementById('record-amount').value = '';
+            document.getElementById('active-list').innerHTML = '';
+            document.getElementById('active-empty').classList.remove('hidden');
+            document.getElementById('active-list').classList.add('hidden');
+            document.getElementById('completed-list').innerHTML = '';
+            document.getElementById('completed-empty').classList.remove('hidden');
+            document.getElementById('completed-list').classList.add('hidden');
+            document.getElementById('badges-list').innerHTML = '';
+            document.getElementById('badges-empty').classList.remove('hidden');
+            document.getElementById('badges-grid').classList.add('hidden');
+
+            // 重置 tab 回預設
+            switchView('latest');
+            switchConfigTab('savings');
+
+            // 切換頁面
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('landing-page').classList.remove('hidden');
+        }
         // ─────────────────────────────────────────────────────────
         let completedPlans = [];
         let planInitialized = false;
+        let lastDateInviteAt = 0; // 上次觸發約會邀請時的完成數
 
         function validateField(inputId, errorId) {
             const el = document.getElementById(inputId);
@@ -1050,7 +1252,54 @@
             qrcodeDiv.innerHTML = "";
             new QRCode(qrcodeDiv, { text: url, width: 180, height: 180, colorDark : "#1e1b4b", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
         }
-        function closeReward() { document.getElementById('reward-overlay').classList.add('hidden'); }
+        function closeReward() {
+            document.getElementById('reward-overlay').classList.add('hidden');
+            const completedCount = allPlans.filter(p => p.completed).length;
+            if (completedCount >= lastDateInviteAt + 3) {
+                lastDateInviteAt = completedCount;
+                showDateInvite();
+            }
+        }
+
+        function showDateInvite() {
+            const char = config[currentCharacter];
+            document.getElementById('invite-title').innerText = `來自${char.name}的邀請`;
+            document.getElementById('invite-message').innerText = `"三個夢想，三次並肩。是時候兌現我的承諾了。"`;
+            // 重置信封動畫（每次重新顯示時重播）
+            const card = document.getElementById('date-invite-card');
+            card.style.animation = 'none';
+            card.offsetHeight; // reflow
+            card.style.animation = '';
+            document.getElementById('date-invite-overlay').classList.remove('hidden');
+        }
+
+        function closeDateInvite() {
+            document.getElementById('date-invite-overlay').classList.add('hidden');
+        }
+
+        const charVideoMap = {
+            Xavier: 'vd1.mp4'
+            // vd2~vd8 待補
+        };
+
+        function acceptDateInvite() {
+            document.getElementById('date-invite-overlay').classList.add('hidden');
+            const videoSrc = charVideoMap[currentCharacter];
+            if (videoSrc) {
+                const video = document.getElementById('date-video');
+                video.src = videoSrc;
+                document.getElementById('video-overlay').classList.remove('hidden');
+                video.play();
+                video.onended = () => closeVideo();
+            }
+        }
+
+        function closeVideo() {
+            const video = document.getElementById('date-video');
+            video.pause();
+            video.src = '';
+            document.getElementById('video-overlay').classList.add('hidden');
+        }
         function closeShare() { document.getElementById('share-overlay').classList.add('hidden'); }
 
         function generateDecorations(type) {
