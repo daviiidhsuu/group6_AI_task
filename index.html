@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深空儲蓄計 - 獵人專屬理財終端</title>
+    <title>深空儲蓄計畫 - 獵人專屬理財終端</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -320,7 +320,7 @@
             <!-- MBTI -->
             <div>
                 <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">你的 MBTI <span class="opacity-40 normal-case font-light">/ Personality Type</span></label>
-                <input type="text" id="user-mbti" placeholder="INTJ" maxlength="4" oninput="this.value=this.value.toUpperCase()" class="w-full p-5 rounded-2xl input-field text-l font-black text-center uppercase tracking-[0.4em]">
+                <input type="text" id="user-mbti" placeholder="例：INTJ" maxlength="4" oninput="this.value=this.value.toUpperCase()" class="w-full p-5 rounded-2xl input-field text-l font-black text-center uppercase tracking-[0.4em]">
             </div>
             <!-- 進入按鈕 -->
             <button onclick="enterApp()" class="w-full py-6 bg-white text-indigo-950 font-black text-xl rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
@@ -482,16 +482,16 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">目標金額 <span class="opacity-40 normal-case font-light">/ Target Amount ($)</span></label>
-                        <input type="number" id="target-amount" placeholder="例：200000" min="1" oninput="updateSavingsPreview(); validateField('target-amount', 'target-error')" class="w-full p-5 rounded-2xl input-field text-2xl font-black tracking-tight">
+                        <input type="text" inputmode="numeric" id="target-amount" placeholder="例：200,000" oninput="formatNumInput(this); updateSavingsPreview(); validateField('target-amount', 'target-error')" class="w-full p-5 rounded-2xl input-field text-2xl font-black tracking-tight">
                         <p id="target-error" class="error-msg"></p>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-600 mb-2 tracking-[0.1em]">初始存款 <span class="opacity-40 normal-case font-light">/ Initial</span></label>
-                            <input type="number" id="current-savings" placeholder="例：50000" min="0" oninput="updateSavingsPreview()" class="w-full p-5 rounded-2xl input-field font-bold">
+                            <input type="text" inputmode="numeric" id="current-savings" placeholder="例：50,000" oninput="formatNumInput(this); updateSavingsPreview()" class="w-full p-5 rounded-2xl input-field font-bold">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-600 mb-2 tracking-[0.1em]">存入月數 <span class="opacity-40 normal-case font-light">/ Months</span></label>
+                            <label class="block text-[10px] font-bold text-slate-600 mb-2 tracking-[0.1em]">達成月數 <span class="opacity-40 normal-case font-light">/ Months</span></label>
                             <input type="number" id="months" placeholder="例：12" min="1" oninput="updateSavingsPreview(); validateField('months', 'months-error')" class="w-full p-5 rounded-2xl input-field font-bold">
                             <p id="months-error" class="error-msg"></p>
                         </div>
@@ -517,17 +517,17 @@
                 <div id="config-view-investment" class="hidden space-y-6">
                     <div>
                         <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">投資夢想 <span class="opacity-40 normal-case font-light">/ Investment Dream</span></label>
-                        <input type="text" id="inv-dream-name" value="獵人榮耀基金" class="w-full p-5 rounded-2xl input-field text-lg font-bold">
+                        <input type="text" id="inv-dream-name" placeholder="例：獵人榮耀基金" class="w-full p-5 rounded-2xl input-field text-lg font-bold">
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">目標金額 <span class="opacity-40 normal-case font-light">/ Target ($)</span></label>
-                            <input type="number" id="inv-target-amount" value="500000" min="1" oninput="validateField('inv-target-amount', 'inv-target-error')" class="w-full p-4 rounded-2xl input-field font-black tracking-tight">
+                            <input type="text" inputmode="numeric" id="inv-target-amount" placeholder="例：500,000" oninput="formatNumInput(this); validateField('inv-target-amount', 'inv-target-error')" class="w-full p-4 rounded-2xl input-field font-black tracking-tight">
                             <p id="inv-target-error" class="error-msg"></p>
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-slate-500 mb-2 tracking-[0.1em]">達成月數 <span class="opacity-40 normal-case font-light">/ Months</span></label>
-                            <input type="number" id="inv-months" value="24" min="1" oninput="validateField('inv-months', 'inv-months-error')" class="w-full p-4 rounded-2xl input-field font-black tracking-tight">
+                            <input type="number" id="inv-months" placeholder="例：24" min="1" oninput="validateField('inv-months', 'inv-months-error')" class="w-full p-4 rounded-2xl input-field font-black tracking-tight">
                             <p id="inv-months-error" class="error-msg"></p>
                         </div>
                     </div>
@@ -541,7 +541,7 @@
                         </div>
                     </div>
 
-                    <button onclick="showInvestmentRecs()" class="w-full py-6 bg-white text-indigo-950 font-black text-xl rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
+                    <button id="rec-btn" onclick="showInvestmentRecs()" class="w-full py-6 bg-white text-indigo-950 font-black text-xl rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
                         進行產品推薦
                     </button>
                 </div>
@@ -553,11 +553,12 @@
                     <div class="absolute top-[-40px] right-[-40px] text-[220px] opacity-[0.04] pointer-events-none font-black italic select-none" id="bg-char-icon">⭐</div>
 
                     <!-- 4 分頁標籤 -->
-                    <div class="flex gap-6 mb-8 relative z-20 border-b border-white/5 pb-4 overflow-x-auto no-scrollbar">
+                    <div class="flex gap-6 mb-8 relative z-20 border-b border-white/5 pb-4 overflow-x-auto no-scrollbar items-center">
                         <button onclick="switchView('latest')" id="tab-latest" class="tab-btn active text-xs font-black uppercase tracking-widest whitespace-nowrap">最新計畫</button>
                         <button onclick="switchView('active')" id="tab-active" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">進行中</button>
                         <button onclick="switchView('completed')" id="tab-completed" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">已完成</button>
                         <button onclick="switchView('badges')" id="tab-badges" class="tab-btn text-xs font-black uppercase tracking-widest whitespace-nowrap">徽章收藏室</button>
+                        <span id="invite-hint" class="ml-auto text-xs font-bold whitespace-nowrap opacity-60" style="color: var(--accent-color);">💌 再完成 3 次獲得約會邀請</span>
                     </div>
 
                     <!-- 最新計畫 -->
@@ -610,7 +611,7 @@
                                     <span class="text-[10px] text-slate-500 font-bold uppercase" id="ledger-date-target"></span>
                                 </div>
                                 <div class="flex gap-4">
-                                    <input type="number" id="record-amount" placeholder="本月存入額" class="flex-1 p-5 rounded-2xl input-field text-lg font-bold">
+                                    <input type="text" inputmode="numeric" id="record-amount" placeholder="本月存入額" oninput="formatNumInput(this)" class="flex-1 p-5 rounded-2xl input-field text-lg font-bold">
                                     <button onclick="addRecord()" class="px-8 bg-white text-indigo-950 font-black rounded-2xl hover:scale-105 transition-transform shadow-2xl text-xs uppercase tracking-widest">存入</button>
                                 </div>
                             </div>
@@ -670,7 +671,7 @@
                             <div id="advisor-confirm" class="hidden dialogue-box text-center">
                                 <p class="text-sm text-slate-200">✅ 已收到您的需求！<br/>理財專員將於 <span class="text-accent-color font-black">24 小時內</span>與您聯繫。</p>
                             </div>
-                            <button onclick="contactAdvisor()" class="w-full py-5 bg-white text-indigo-950 font-black text-lg rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
+                            <button id="advisor-btn" onclick="contactAdvisor()" class="w-full py-5 bg-white text-indigo-950 font-black text-lg rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110">
                                 聯繫理財專員
                             </button>
                         </div>
@@ -685,14 +686,14 @@
 
     <script>
         const config = {
-            Xavier:  { name: "籃球員", accent: "#a78bfa", bodyClass: "bg-xavier",  icon: "⭐", scenType: 'stars',   reward: { id: 'xav_medal',   icon: "🏅", title: "星辰勳章",   quote: "這枚勳章代表我們共同守護的未來。辛苦了，我的獵人。" }, dialogues: { met: "做得很好。剩下的時間，要不要陪我睡一會？", unmet: "沒關係，也常常忘記時間。下個月一起趕上吧。" } },
-            Zayne:   { name: "偶像",  accent: "#7dd3fc", bodyClass: "bg-zayne",   icon: "❄️", scenType: 'snow',    reward: { id: 'zayne_ring',  icon: "💍", title: "永恆冰晶戒", quote: "這是獎勵，也是承諾。從今以後，你的夢想裡必須有我。" }, dialogues: { met: "數據顯示執行力很完美。繼續保持。", unmet: "偏離計畫不是好習慣。下個月請務必精準執行。" } },
-            Rafayel: { name: "董事長", accent: "#fb7185", bodyClass: "bg-rafayel", icon: "🎨", scenType: 'bubbles', reward: { id: 'raf_pearl',   icon: "🐚", title: "深海珍珠",   quote: "這顆珍珠是深海最珍貴的收藏，現在是你的了。" }, dialogues: { met: "真不愧是我的獵人，太棒了！慶祝一下？", unmet: "怎麼少了這麼多？我的環島旅行要延期了嗎？一定要補回來喔！" } },
-            Sylus:   { name: "大學生", accent: "#ef4444", bodyClass: "bg-sylus",   icon: "🐦", scenType: 'feathers',reward: { id: 'sylus_coin', icon: "🪙", title: "黑鴉金幣",   quote: "只有我能給予你這份勝利。收下它，成為我的專屬。" }, dialogues: { met: "利落。這才是我的獵人該有的執行力。", unmet: "失手了？在我的領地可不允許這種怠慢。下月連本帶利補回來。" } },
-            FemA:    { name: "空服員", accent: "#f9a8d4", bodyClass: "bg-fema",    icon: "🌸", scenType: 'stars',   reward: { id: 'fema_ribbon', icon: "🎀", title: "星光緞帶",   quote: "這條緞帶代表你的努力與美麗。你做到了，我的夥伴。" }, dialogues: { met: "太棒了！你的努力我都看到了，繼續加油喔！", unmet: "沒關係，下個月我們一起加把勁，一定能追上的！" } },
-            FemB:    { name: "工程師", accent: "#6ee7b7", bodyClass: "bg-femb",    icon: "🍃", scenType: 'bubbles', reward: { id: 'femb_leaf',   icon: "🌿", title: "翡翠葉片",   quote: "這片葉子見證了你的成長。自然的力量與你同在。" }, dialogues: { met: "穩穩的，很好！像大樹一樣，慢慢積累才是長久之道。", unmet: "這個月有點少，但沒關係，生長需要時間，我們繼續吧。" } },
-            FemC:    { name: "教師",  accent: "#fcd34d", bodyClass: "bg-femc",    icon: "✨", scenType: 'feathers',reward: { id: 'femc_star',   icon: "⭐", title: "黃金星幣",   quote: "光芒四射！這枚星幣是你閃耀努力的象徵。" }, dialogues: { met: "閃閃發光！你這個月表現得超棒的，要繼續發光喔！", unmet: "星星有時也會黯淡，但你的光芒不會消失，下個月再出發！" } },
-            FemD:    { name: "護士",  accent: "#c4b5fd", bodyClass: "bg-femd",    icon: "🌙", scenType: 'snow',    reward: { id: 'femd_moon',   icon: "🌕", title: "滿月水晶",   quote: "月光為你指引方向。這枚水晶是你堅持的見證。" }, dialogues: { met: "靜靜地、卻穩穩地前進，月亮為你驕傲。", unmet: "月有陰晴圓缺，這個月的缺口，下個月我們一起補滿。" } }
+            Xavier:  { name: "籃球員", accent: "#a78bfa", bodyClass: "bg-xavier",  icon: "⭐", scenType: 'stars',   reward: { id: 'xav_medal',   icon: "🏅", title: "星辰勳章",   quote: "你做到了。不是運氣，是你真的變強了。我很驕傲。" }, dialogues: { init: "放心，把未來交給我。我會陪你一步一步，把錢慢慢存起來。", met: "看到沒？你真的做得到。這種穩穩累積的感覺，很帥。", unmet: "沒關係，今天就算失誤了，我還在。下一次我們一起拉回來。" } },
+            Zayne:   { name: "偶像",  accent: "#7dd3fc", bodyClass: "bg-zayne",   icon: "❄️", scenType: 'snow',    reward: { id: 'zayne_ring',  icon: "💍", title: "永恆冰晶戒", quote: "成功啦！！你真的好厲害！我們一起變富有了💖" }, dialogues: { init: "我們一起開始存錢計畫吧～！慢慢累積也沒關係✨", met: "哇！存款有增加耶！這樣下去一定可以變有錢的💕", unmet: "是不是又忍不住花錢了～🥺沒關係！下次我會提醒你的！" } },
+            Rafayel: { name: "董事長", accent: "#fb7185", bodyClass: "bg-rafayel", icon: "🎨", scenType: 'bubbles', reward: { id: 'raf_pearl',   icon: "🐚", title: "深海珍珠",   quote: "做得很好。你已經開始懂得，怎麼讓錢為你工作了。" }, dialogues: { init: "別擔心，你只要待在我身邊就好。這個儲蓄計畫，我會幫你規劃好。", met: "很好，比我想的還要穩。看來，你比自己想像中更有價值。", unmet: "這點波動不算什麼。我在，資產不會讓你崩掉。" } },
+            Sylus:   { name: "大學生", accent: "#ef4444", bodyClass: "bg-sylus",   icon: "🐦", scenType: 'feathers',reward: { id: 'sylus_coin', icon: "🪙", title: "黑鴉金幣",   quote: "這樣的未來，好像真的可以期待了。<br>…因為旁邊是你。" }, dialogues: { init: "我想把未來存起來…如果是跟你一起的話，好像比較有動力。", met: "你看，我們的錢在慢慢變多。<br>…有種未來也在變近的感覺。", unmet: "今天沒做好也沒關係。<br>反正…我本來就打算陪你很久。" } },
+            FemA:    { name: "空服員", accent: "#f9a8d4", bodyClass: "bg-fema",    icon: "🌸", scenType: 'stars',   reward: { id: 'fema_ribbon', icon: "🎀", title: "星光緞帶",   quote: "辛苦了，真的很穩定🌷<br>之後的部分…也讓我陪你一起走吧" }, dialogues: { init: "我幫你把計畫整理好了✨<br>接下來我們一起慢慢執行就好", met: "進展很穩定呢☺️<br>這樣下去會很安心的", unmet: "這次稍微偏了一點點<br>不過沒關係，我幫你一起調整，好嗎？" } },
+            FemB:    { name: "工程師", accent: "#6ee7b7", bodyClass: "bg-femb",    icon: "🍃", scenType: 'bubbles', reward: { id: 'femb_leaf',   icon: "🌿", title: "翡翠葉片",   quote: "…嗯，這次做得很好。不過別得意，是我教得好，這次有進步😏" }, dialogues: { init: "我已經幫你設好儲蓄比例了，這次就乖乖照著做，好嗎？📚", met: "還不錯嘛，比我預期的穩。看來你也不是完全不行", unmet: "又超支了？我就說吧，你這種地方最容易出錯….." } },
+            FemC:    { name: "教師",  accent: "#fcd34d", bodyClass: "bg-femc",    icon: "✨", scenType: 'feathers',reward: { id: 'femc_star',   icon: "⭐", title: "黃金星幣",   quote: "欸…真的做到喔<br>還不錯嘛<br><br>…別誤會，我只是覺得你有變好一點而已" }, dialogues: { init: "終於開始了喔？<br>那就給我好好照計畫做啦", met: "…還可以啦<br>至少有在進步", unmet: "你看，又亂花錢了吧🙄<br>我就知道你會這樣<br><br>…不過算了，下次再教你" } },
+            FemD:    { name: "護士",  accent: "#c4b5fd", bodyClass: "bg-femd",    icon: "🌙", scenType: 'snow',    reward: { id: 'femd_moon',   icon: "🌕", title: "滿月水晶",   quote: "真的做到了耶…你好棒💗<br>之後也想這樣一直陪你" }, dialogues: { init: "慢慢來就好，好嗎？🥺<br>我會在旁邊陪你一起存錢的～", met: "欸真的有增加耶…好厲害🎀🧸<br>你這樣努力，我都有看到喔", unmet: "是不是最近太累了…？🥲<br>沒關係啦，我陪你一起慢慢調整就好" } }
         };
 
         const products = {
@@ -743,16 +744,36 @@
         }
 
         function enterApp() {
-            const year  = document.getElementById('bday-year').value.trim();
-            const month = document.getElementById('bday-month').value.trim();
-            const day   = document.getElementById('bday-day').value.trim();
-            const mbti  = document.getElementById('user-mbti').value.trim();
-            const errEl = document.getElementById('landing-error');
+            const yearStr  = document.getElementById('bday-year').value.trim();
+            const monthStr = document.getElementById('bday-month').value.trim();
+            const dayStr   = document.getElementById('bday-day').value.trim();
+            const mbti     = document.getElementById('user-mbti').value.trim();
+            const errEl    = document.getElementById('landing-error');
 
-            if (!year || !month || !day) {
+            const year  = parseInt(yearStr);
+            const month = parseInt(monthStr);
+            const day   = parseInt(dayStr);
+
+            // A. 年份必須是四位數
+            if (!yearStr || yearStr.length !== 4 || isNaN(year) || year < 1000 || year > 9999) {
+                errEl.innerText = '請輸入正確的四位數年份';
                 errEl.classList.remove('hidden');
                 return;
             }
+            // B. 月份只能是 1～12
+            if (!monthStr || isNaN(month) || month < 1 || month > 12) {
+                errEl.innerText = '月份請輸入 1 到 12';
+                errEl.classList.remove('hidden');
+                return;
+            }
+            // C. 日期必須在該月份的有效範圍內（含閏年判斷）
+            const maxDay = new Date(year, month, 0).getDate();
+            if (!dayStr || isNaN(day) || day < 1 || day > maxDay) {
+                errEl.innerText = `${month} 月只有 1 到 ${maxDay} 日`;
+                errEl.classList.remove('hidden');
+                return;
+            }
+
             errEl.classList.add('hidden');
             userProfile = { year, month, day, character: selectedLandingChar, mbti };
 
@@ -776,6 +797,8 @@
             plan = { dream: "", target: 0, current: 0, months: 0, records: [], kpi: 0, completed: false };
             planInitialized = false;
             lastDateInviteAt = 0;
+            const hint = document.getElementById('invite-hint');
+            if (hint) hint.innerText = '💌 再完成 3 次獲得約會邀請';
 
             // 清除儲蓄計畫表單
             document.getElementById('dream-name').value = '';
@@ -797,6 +820,7 @@
             document.getElementById('inv-panel-waiting').classList.remove('hidden');
             document.getElementById('inv-panel-results').classList.add('hidden');
             document.getElementById('advisor-confirm').classList.add('hidden');
+            document.getElementById('rec-btn').innerText = '進行產品推薦';
 
             // 重置右側面板 UI
             document.getElementById('latest-empty').classList.remove('hidden');
@@ -830,10 +854,19 @@
         let planInitialized = false;
         let lastDateInviteAt = 0; // 上次觸發約會邀請時的完成數
 
+        // 千分位格式化 helpers
+        function formatNumInput(el) {
+            const raw = el.value.replace(/[^0-9]/g, '');
+            el.value = raw ? parseInt(raw).toLocaleString() : '';
+        }
+        function getNumVal(id) {
+            return parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
+        }
+
         function validateField(inputId, errorId) {
             const el = document.getElementById(inputId);
             const errEl = document.getElementById(errorId);
-            const val = parseFloat(el.value);
+            const val = parseFloat(el.value.replace(/,/g, ''));
             if (el.value === '' || isNaN(val) || val <= 0) {
                 el.classList.add('error');
                 errEl.innerText = val < 0 ? '數值不可為負數' : '請輸入有效的正整數';
@@ -845,9 +878,9 @@
         }
 
         function updateSavingsPreview() {
-            const target = parseFloat(document.getElementById('target-amount').value) || 0;
-            const current = parseFloat(document.getElementById('current-savings').value) || 0;
-            const months = parseInt(document.getElementById('months').value) || 0;
+            const target  = getNumVal('target-amount');
+            const current = getNumVal('current-savings');
+            const months  = parseInt(document.getElementById('months').value) || 0;
             const preview = document.getElementById('preview-monthly-kpi');
             if (target > 0 && months > 0) {
                 const kpi = Math.max(0, Math.round((target - current) / months));
@@ -916,8 +949,8 @@
                         <div class="text-[10px] text-slate-400">${p.desc}</div>
                     </div>
                     <div class="text-right shrink-0 ml-4">
+                        <div class="text-[10px] text-slate-400 mb-0.5">年化報酬率</div>
                         <div class="text-sm font-black text-accent-color">預期 ${(p.rate * 100).toFixed(1)}%</div>
-                        <div class="text-[9px] text-slate-500 uppercase">Annualized</div>
                     </div>
                 `;
                 list.appendChild(card);
@@ -934,6 +967,12 @@
             document.getElementById('inv-panel-waiting').classList.add('hidden');
             document.getElementById('inv-panel-results').classList.remove('hidden');
             document.getElementById('advisor-confirm').classList.add('hidden');
+            // 按鈕文字改為「重新推薦」
+            document.getElementById('rec-btn').innerText = '重新推薦';
+            // 重置聯繫按鈕
+            const advisorBtn = document.getElementById('advisor-btn');
+            advisorBtn.disabled = false;
+            advisorBtn.className = 'w-full py-5 bg-white text-indigo-950 font-black text-lg rounded-2xl transform active:scale-95 transition-all uppercase tracking-[0.3em] shadow-2xl hover:brightness-110';
         }
 
         function initPlan() {
@@ -942,8 +981,8 @@
             if (!validTarget || !validMonths) return;
             const newPlan = {
                 dream: document.getElementById('dream-name').value.trim() || '未命名計畫',
-                target: parseFloat(document.getElementById('target-amount').value),
-                current: parseFloat(document.getElementById('current-savings').value) || 0,
+                target: getNumVal('target-amount'),
+                current: getNumVal('current-savings'),
                 months: parseInt(document.getElementById('months').value),
                 records: [],
                 kpi: 0,
@@ -956,7 +995,7 @@
             planInitialized = true;
             document.getElementById('display-dream-target').innerText = plan.dream;
             document.getElementById('monthly-kpi').innerText = `$ ${plan.kpi.toLocaleString()}`;
-            document.getElementById('dialogue-text').innerHTML = `<span class="font-black text-accent-color uppercase">${config[currentCharacter].name}：</span><br/>"計畫建立成功。讓我們朝著 ${plan.dream} 邁進。"`;
+            document.getElementById('dialogue-text').innerHTML = `<span class="font-black text-accent-color uppercase">${config[currentCharacter].name}：</span><br/>"${config[currentCharacter].dialogues.init}"`;
             updateLedger();
             document.getElementById('latest-empty').classList.add('hidden');
             document.getElementById('latest-detail').classList.remove('hidden');
@@ -973,7 +1012,7 @@
 
         function addRecord() {
             const amountInput = document.getElementById('record-amount');
-            const amount = parseFloat(amountInput.value);
+            const amount = parseFloat(amountInput.value.replace(/,/g, ''));
             if (!amount || isNaN(amount)) return;
             plan.records.push(amount);
             amountInput.value = '';
@@ -1019,11 +1058,12 @@
                 plan.quote = char.reward.quote;
                 document.getElementById('reward-icon').innerText = char.reward.icon;
                 document.getElementById('reward-title').innerText = char.reward.title;
-                document.getElementById('reward-char-quote').innerText = `"${char.name}：${char.reward.quote}"`;
+                document.getElementById('reward-char-quote').innerHTML = `"${char.name}：${char.reward.quote}"`;
                 document.getElementById('reward-overlay').classList.remove('hidden');
                 renderActivePlans();
                 renderCompletedPlans();
                 renderBadges();
+                updateInviteHint();
             }
         }
 
@@ -1079,6 +1119,14 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function updateInviteHint() {
+            const hint = document.getElementById('invite-hint');
+            if (!hint) return;
+            const completedCount = allPlans.filter(p => p.completed).length;
+            const remaining = 3 - (completedCount % 3);
+            hint.innerText = `💌 再完成 ${remaining} 次獲得約會邀請`;
         }
 
         function renderBadges() {
@@ -1240,6 +1288,9 @@
 
         function contactAdvisor() {
             document.getElementById('advisor-confirm').classList.remove('hidden');
+            const btn = document.getElementById('advisor-btn');
+            btn.disabled = true;
+            btn.className = 'w-full py-5 bg-white/10 text-slate-500 font-black text-lg rounded-2xl uppercase tracking-[0.3em] cursor-not-allowed';
         }
 
         function openShare() {
@@ -1264,7 +1315,7 @@
         function showDateInvite() {
             const char = config[currentCharacter];
             document.getElementById('invite-title').innerText = `來自${char.name}的邀請`;
-            document.getElementById('invite-message').innerText = `"三個夢想，三次並肩。是時候兌現我的承諾了。"`;
+            document.getElementById('invite-message').innerHTML = `"三個夢想，三次並肩。是時候兌現我的承諾了。"`;
             // 重置信封動畫（每次重新顯示時重播）
             const card = document.getElementById('date-invite-card');
             card.style.animation = 'none';
@@ -1278,8 +1329,11 @@
         }
 
         const charVideoMap = {
-            Xavier: 'vd1.mp4'
-            // vd2~vd8 待補
+            Xavier:  'vd1.mp4',
+            Zayne:   'vd2.mp4',
+            Rafayel: 'vd3.mp4',
+            Sylus:   'vd4.mp4'
+            // vd5~vd8 待補
         };
 
         function acceptDateInvite() {
