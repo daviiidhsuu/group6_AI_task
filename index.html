@@ -432,15 +432,10 @@
     </div>
 
     <!-- 分享彈窗 -->
-    <div id="share-overlay" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/90 backdrop-blur-xl p-6">
-        <div class="glass-card max-w-md w-full p-10 text-center reward-modal border-accent-color/50 border-2">
-            <h2 class="text-2xl font-black mb-6 tracking-widest text-white uppercase">分享你的儲蓄計畫</h2>
-            <div id="qrcode-container"><div id="qrcode"></div></div>
-            <div class="mb-6">
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-2">計畫連結</p>
-                <div class="bg-black/40 p-3 rounded-lg text-xs break-all border border-white/10 text-accent-color font-mono" id="share-link"></div>
-            </div>
-            <button onclick="closeShare()" class="w-full py-4 bg-white text-indigo-950 font-black rounded-2xl uppercase tracking-widest hover:brightness-110 transition">返回計畫</button>
+    <div id="share-overlay" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/90 backdrop-blur-xl p-4" onclick="closeShare()">
+        <div class="relative max-h-screen flex items-center justify-center" onclick="event.stopPropagation()">
+            <img src="愛在增值時.png" alt="關於我們" class="max-h-[90vh] max-w-[90vw] w-auto rounded-2xl shadow-2xl object-contain">
+            <button onclick="closeShare()" class="absolute top-3 right-3 w-9 h-9 bg-black/60 hover:bg-black/90 text-white rounded-full text-lg font-black flex items-center justify-center transition">✕</button>
         </div>
     </div>
 
@@ -456,7 +451,7 @@
                 </h1>
                 <div class="flex justify-center gap-4 items-center mt-4">
                     <p class="text-slate-400 font-light tracking-[0.5em] text-xs uppercase">interest-ing love</p>
-                    <button onclick="openShare()" class="bg-accent-color/20 text-accent-color border border-accent-color/50 px-3 py-1 rounded-full text-[10px] font-bold hover:bg-accent-color hover:text-white transition">分享計畫</button>
+                    <button onclick="openShare()" class="bg-accent-color/20 text-accent-color border border-accent-color/50 px-3 py-1 rounded-full text-[10px] font-bold hover:bg-accent-color hover:text-white transition">關於我們</button>
                 </div>
             </div>
         </header>
@@ -1313,14 +1308,7 @@
         }
 
         function openShare() {
-            const overlay = document.getElementById('share-overlay');
-            const qrcodeDiv = document.getElementById('qrcode');
-            const link = document.getElementById('share-link');
-            const url = "https://deepspace-savings.io/share/" + Math.floor(Math.random()*9999);
-            link.innerText = url;
-            overlay.classList.remove('hidden');
-            qrcodeDiv.innerHTML = "";
-            new QRCode(qrcodeDiv, { text: url, width: 180, height: 180, colorDark : "#1e1b4b", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
+            document.getElementById('share-overlay').classList.remove('hidden');
         }
         function closeReward() {
             document.getElementById('reward-overlay').classList.add('hidden');
